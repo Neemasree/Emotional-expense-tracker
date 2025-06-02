@@ -1,18 +1,13 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('list/', views.expense_list, name='expense_list'),
-    path('add/', views.add_expense, name='add_expense'),
-    path('analytics/', views.expense_analytics, name='expense_analytics'),
-    path('challenges/create/', views.create_challenge, name='create_challenge'),
-    path('challenges/complete/<str:challenge_id>/', views.complete_challenge, name='complete_challenge'),
-    path('predict-regret/', views.predict_regret, name='predict_regret'),
-    path('trigger-habits/', views.trigger_habits, name='trigger_habits'),
+    path('register/', views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
+    path('logout/', views.logout_view, name='logout'),  # Use custom logout view
+    path('profile/', views.profile, name='profile'),
+    path('award-badge/<str:badge_name>/', views.award_badge, name='award_badge'),
 ]
-
-
-
 
 

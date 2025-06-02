@@ -1,0 +1,5 @@
+django==5.1.1
+pymongo==4.6.1
+python-dotenv==1.0.0
+textblob==0.17.1
+nltk==3.8.1
