@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Expense Analytics</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Spending by Emotion</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="emotionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Spending by Trigger Habit</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="triggerChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Spending by Regret Level</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="regretChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Spending by Category</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Prepare data for charts
+    const emotionData = {
+        labels: [{% for item in emotions_data %}'{{ item.label|default:"Unknown" }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for item in emotions_data %}{{ item.total|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+        }]
+    };
+
+    const triggerData = {
+        labels: [{% for item in triggers_data %}'{{ item.label|default:"Unknown" }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Amount Spent ($)',
+            data: [{% for item in triggers_data %}{{ item.total|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: '#36A2EB'
+        }]
+    };
+
+    const regretData = {
+        labels: [{% for item in regret_data %}'{{ item.label|default:"Unknown" }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            data: [{% for item in regret_data %}{{ item.total|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: ['#4BC0C0', '#FFCE56', '#FF9F40', '#FF6384']
+        }]
+    };
+
+    const categoryData = {
+        labels: [{% for item in category_data %}'{{ item.label|default:"Unknown" }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Amount Spent ($)',
+            data: [{% for item in category_data %}{{ item.total|floatformat:2 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+            backgroundColor: '#9966FF'
+        }]
+    };
+
+    // Chart.js initialization
+    const emotionCtx = document.getElementById('emotionChart').getContext('2d');
+    new Chart(emotionCtx, {
+        type: 'pie',
+        data: emotionData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'right' },
+                title: {
+                    display: true,
+                    text: 'Spending by Emotion'
+                }
+            }
+        }
+    });
+
+    const triggerCtx = document.getElementById('triggerChart').getContext('2d');
+    new Chart(triggerCtx, {
+        type: 'bar',
+        data: triggerData,
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Spending by Trigger Habit'
+                }
+            }
+        }
+    });
+
+    const regretCtx = document.getElementById('regretChart').getContext('2d');
+    new Chart(regretCtx, {
+        type: 'pie',
+        data: regretData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'right' },
+                title: {
+                    display: true,
+                    text: 'Spending by Regret Level'
+                }
+            }
+        }
+    });
+
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'bar',
+        data: categoryData,
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Spending by Category'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+

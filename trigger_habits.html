@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Trigger Habits</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Your Trigger Habits</h5>
+                </div>
+                <div class="card-body">
+                    {% if user_habits_data %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Habit</th>
+                                        <th>Count</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for habit in user_habits_data %}
+                                        <tr>
+                                            <td>{{ habit.id }}</td>
+                                            <td>{{ habit.count }}</td>
+                                            <td>${{ habit.total|floatformat:2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p>You haven't tracked any trigger habits yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Add New Trigger Habit</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Habit Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Habit</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>All Available Trigger Habits</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for habit in all_habits %}
+                            <li class="list-group-item">
+                                <strong>{{ habit.name }}</strong>
+                                {% if habit.description %}
+                                    <p class="mb-0 small text-muted">{{ habit.description }}</p>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

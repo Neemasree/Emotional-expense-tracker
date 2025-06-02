@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Your Expenses</h1>
+        <a href="{% url 'add_expense' %}" class="btn btn-primary">Add New Expense</a>
+    </div>
+    
+    {% if expenses %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Emotion</th>
+                    <th>Regret Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date|date:"M d, Y" }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>${{ expense.amount }}</td>
+                    <td>{{ expense.category }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if expense.emotion == 'happy' %}bg-success
+                            {% elif expense.emotion == 'sad' %}bg-info
+                            {% elif expense.emotion == 'stressed' %}bg-warning
+                            {% elif expense.emotion == 'angry' %}bg-danger
+                            {% else %}bg-secondary{% endif %}">
+                            {{ expense.emotion }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge 
+                            {% if expense.regret_level == 'essential' %}bg-success
+                            {% elif expense.regret_level == 'treat' %}bg-info
+                            {% elif expense.regret_level == 'impulse' %}bg-warning
+                            {% elif expense.regret_level == 'regretted' %}bg-danger
+                            {% else %}bg-secondary{% endif %}">
+                            {{ expense.regret_level }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            You haven't recorded any expenses yet. <a href="{% url 'add_expense' %}">Add your first expense</a>.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

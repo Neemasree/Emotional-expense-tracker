@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard">
+    <h1>Emotional Expense Dashboard</h1>
+    
+    {% if trend_alerts %}
+    <div class="alert alert-info">
+        <h5>Spending Trend Alerts</h5>
+        <ul>
+            {% for alert in trend_alerts %}
+            <li>{{ alert.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Recent Expenses</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_expenses %}
+                        <ul class="list-group">
+                            {% for expense in recent_expenses %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>${{ expense.amount }}</strong> - {{ expense.description }}
+                                        <span class="badge bg-primary">{{ expense.emotion }}</span>
+                                        {% if expense.regret_level == 'regretted' %}
+                                            <span class="badge bg-danger">Regretted</span>
+                                        {% endif %}
+                                    </div>
+                                    <small>{{ expense.date|date:"M d, Y" }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url 'add_expense' %}" class="btn btn-primary mt-3">Add Expense</a>
+                    {% else %}
+                        <p>No expenses recorded yet.</p>
+                        <a href="{% url 'add_expense' %}" class="btn btn-primary">Add Your First Expense</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Active Challenges</h5>
+                </div>
+                <div class="card-body">
+                    {% if active_challenges %}
+                        <ul class="list-group">
+                            {% for challenge in active_challenges %}
+                                <li class="list-group-item">
+                                    <h6>{{ challenge.title }}</h6>
+                                    <p>{{ challenge.description }}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <small>Ends: {{ challenge.end_date|date:"M d, Y" }}</small>
+                                        <!-- Removed problematic URL tag -->
+                                        <a href="/expenses/challenges/complete/{{ challenge._id }}/" class="btn btn-sm btn-success">Complete</a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No active challenges.</p>
+                    {% endif %}
+                    <a href="{% url 'create_challenge' %}" class="btn btn-primary mt-3">Create Challenge</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

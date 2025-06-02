@@ -1,24 +1,18 @@
-from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from django.http import HttpResponse
-from django.shortcuts import redirect
-
-# Simple view for the root URL
-def home(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    return HttpResponse("<h1>Welcome to Emotional Expense Tracker</h1><p>Please <a href='/users/login/'>login</a> or <a href='/users/register/'>register</a> to continue.</p>")
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home, name='home'),  # Add a simple home view
-    path('expenses/', include('expenses.urls')),
-    path('users/', include('users.urls')),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('list/', views.expense_list, name='expense_list'),
+    path('add/', views.add_expense, name='add_expense'),
+    path('analytics/', views.expense_analytics, name='expense_analytics'),
+    path('challenges/create/', views.create_challenge, name='create_challenge'),
+    path('challenges/complete/<str:challenge_id>/', views.complete_challenge, name='complete_challenge'),
+    path('predict-regret/', views.predict_regret, name='predict_regret'),
+    path('trigger-habits/', views.trigger_habits, name='trigger_habits'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 
 

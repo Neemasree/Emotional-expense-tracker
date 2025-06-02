@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Create a New Challenge</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Challenge Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                        <small class="form-text text-muted">Example: "No coffee for 7 days" or "Limit food delivery to once a week"</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        <small class="form-text text-muted">Describe the rules of your challenge</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="points_reward" class="form-label">Points Reward</label>
+                        <input type="number" class="form-control" id="points_reward" name="points_reward" value="10" required>
+                        <small class="form-text text-muted">How many points you'll earn for completing this challenge</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Challenge</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
